@@ -8,12 +8,16 @@ TODOs on the way. A toy example of a VM.
 `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
 
 #### Scarb 
+
+Scarb is a Cairo package and compiler toolchain manager.
 `curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh`
 
 #### Foundry
+
+Starknet Foundry is a toolchain for developing smart contracts for Starknet.
 `curl -L https://raw.githubusercontent.com/foundry-rs/starknet-foundry/master/scripts/install.sh | sh` 
 
-Run `snfoundryup`
+And then run `snfoundryup`
 
 #### Universal Sierra Compiler
 `curl -L https://raw.githubusercontent.com/software-mansion/universal-sierra-compiler/master/scripts/install.sh | sh`
@@ -46,6 +50,8 @@ Follow the `TODO`s in the `src/vm/vm.cairo` and `tests/test_contract.cairo`!
 ## Useful and helpful docs
 
 Head over to the [Cairo Book](https://book.cairo-lang.org/ch02-00-common-programming-concepts.html)
+
+Scarb [cheatsheet](https://docs.swmansion.com/scarb/docs/cheatsheet.html)
 
 Software Mansion documentation of all available [Modules and Traits](https://docs.swmansion.com/scarb/corelib/core-starknet-storage.html?highlight=map#storage) 
 `TODO fix link`
