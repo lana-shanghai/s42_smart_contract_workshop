@@ -35,25 +35,28 @@ pub mod ProvableVM {
     impl ProvableVMImpl of super::IProvableVM<ContractState> {
         fn get_stack(self: @ContractState) -> Array<felt252> {
             // TODO declare an empty array. How to make sure we can add items to it?
-            
+            let mut stack: Array<felt252> = array![];
+
             // TODO loop through the stack Vec in storage and append to the array.
+            for i in 0..self.stack_len.read() {
+                stack.append(self.stack.at(i.try_into().unwrap()).read());
+            };
+
             // Now the compiler says the VecTrait is unused, but what happens if we
             // add the code? 
-            array![]
+            stack
         }
         
         fn get_pc(self: @ContractState) -> felt252 {
-            // TODO: read the program counter from the storage
-            0
+            self.pc.read()
         }
 
         fn write_heap(ref self: ContractState, value: felt252) {
-            // TODO write to the heap
+            self.heap.write(value);
         }
 
         fn get_heap(ref self: ContractState) -> felt252 {
-            // TODO: read from the heap
-            0
+            self.heap.read()
         }
 
         fn execute_instruction(ref self: ContractState, opcode: felt252, operand: felt252) {
@@ -61,7 +64,9 @@ pub mod ProvableVM {
                     // PUSH
                     0 => { 
                         // TODO: write the operand to the stack
+                        self.stack.append().write(operand);
                         // TODO: update stack length
+                        self.stack_len.write(self.stack_len.read() + 1);
                     },
                     // POP
                     1 => { 
