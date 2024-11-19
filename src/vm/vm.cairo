@@ -26,10 +26,9 @@ pub mod ProvableVM {
     #[storage]
     struct Storage {
         pc: felt252,
-        stack: Vec<felt252>,
-        stack_len: u32,
+        stack: Vec<felt252>, // Check Storage Vecs in Cairo Book!
+        stack_len: u32, // What is a u32 under the hood  in Cairo?
         heap: felt252,
-        flags: u8,
     }
 
     #[abi(embed_v0)]
