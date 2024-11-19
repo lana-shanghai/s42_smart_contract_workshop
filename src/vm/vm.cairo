@@ -14,7 +14,7 @@ pub trait IProvableVM<TContractState> {
     fn get_pc(self: @TContractState) -> felt252;
 }
 
-/// Simple contract for managing balance.
+/// A simple provable VM.
 #[starknet::contract]
 pub mod ProvableVM {
     use super::IProvableVM;
