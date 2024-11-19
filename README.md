@@ -78,7 +78,7 @@ the program backwards!
 
 ## Setup account for interacting with the blockchain
 
-Add Braavos to extentions and create a new accout. Export the private key, 
+Add [Braavos](https://chromewebstore.google.com/detail/braavos-starknet-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma?hl=en&pli=1) wallet to extentions and create a new account. Export the private key, 
 public key, and address. Save them securely in 1Password or discard after
 tests. Never use the same wallets for coding and for storing funds!
 
