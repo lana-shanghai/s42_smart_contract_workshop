@@ -40,20 +40,65 @@ fn test_push_opcode_operand() {
     assert(stack_after == array![10], 'Incorrect stack');
 }
 
-// #[test]
-// #[feature("safe_dispatcher")]
-// fn test_cannot_increase_balance_with_zero_value() {
-//     let contract_address = deploy_contract("HelloStarknet");
+#[test]
+fn test_pop_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
 
-//     let safe_dispatcher = IHelloStarknetSafeDispatcher { contract_address };
+    let dispatcher = IProvableVMDispatcher { contract_address };
 
-//     let balance_before = safe_dispatcher.get_balance().unwrap();
-//     assert(balance_before == 0, 'Invalid balance');
+    // TODO test the pop opcode
+}
 
-//     match safe_dispatcher.increase_balance(0) {
-//         Result::Ok(_) => core::panic_with_felt252('Should have panicked'),
-//         Result::Err(panic_data) => {
-//             assert(*panic_data.at(0) == 'Amount cannot be 0', *panic_data.at(0));
-//         }
-//     };
-// }
+#[test]
+fn test_add_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the add opcode
+}
+
+#[test]
+fn test_sub_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the sub opcode
+}
+
+#[test]
+fn test_store_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the store opcode
+}
+
+#[test]
+fn test_load_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the load opcode
+}
+
+#[test]
+fn test_halt_opcode_operand() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the halt opcode
+}
+
+#[test]
+fn test_pc() {
+    let contract_address = deploy_contract("ProvableVM");
+
+    let dispatcher = IProvableVMDispatcher { contract_address };
+
+    // TODO test the program counter when running a program
+}

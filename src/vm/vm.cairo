@@ -7,7 +7,9 @@ pub trait IProvableVM<TContractState> {
     /// Execute instruction.
     fn execute_instruction(ref self: TContractState, opcode: felt252, operand: felt252);
     /// Write a new element to the heap.
-    fn write_heap_element(ref self: TContractState, value: felt252) {}
+    fn write_heap(ref self: TContractState, value: felt252) {}
+    /// Read from the heap.
+    fn get_heap(ref self: TContractState) -> felt252;
     /// Retrieve latest stack.
     fn get_stack(self: @TContractState) -> Array<felt252>;
     /// Retrieve program counter.
@@ -43,8 +45,12 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
             self.pc.read()
         }
 
-        fn write_heap_element(ref self: ContractState, value: felt252) {
+        fn write_heap(ref self: ContractState, value: felt252) {
             self.heap.write(value);
+        }
+
+        fn get_heap(ref self: ContractState) -> felt252 {
+            self.heap.read()
         }
 
         fn execute_instruction(ref self: ContractState, opcode: felt252, operand: felt252) {
@@ -70,49 +76,21 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
                         ) + *stack.at(
                             self.stack_len.read() - 2_u32
                         );
-                        
-                        let mut storage_ptr_0 = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr_0.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
-                        
-                        let mut storage_ptr_1 = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr_1.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
 
-                        let mut storage_ptr = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr.write(sum);
+                        self.stack.append().write(sum);
+                        self.stack_len.write(self.stack_len.read() + 1);
                     }, 
                     // SUB
                     3 => { 
                         let stack = self.get_stack();
                         let diff = *stack.at(
-                            self.stack_len.read() - 1_u32
-                        ) - *stack.at(
                             self.stack_len.read() - 2_u32
+                        ) - *stack.at(
+                            self.stack_len.read() - 1_u32
                         );
                         
-                        let mut storage_ptr_0 = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr_0.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
-                        
-                        let mut storage_ptr_1 = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr_1.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
-
-                        let mut storage_ptr = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr.write(diff);
+                        self.stack.append().write(diff);
+                        self.stack_len.write(self.stack_len.read() + 1);
                     }, 
                     4 => {  }, // JMP
                     5 => {  }, // JZ
@@ -127,12 +105,6 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
                         let stack = self.get_stack();
                         let element_to_store = *stack.at(self.stack_len.read() - 1_u32);
                         self.heap.write(element_to_store);
-
-                        let mut storage_ptr = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
                     }, 
                     // HALT
                     8 => { panic!("Halt execution") },
