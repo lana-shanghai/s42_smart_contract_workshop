@@ -53,8 +53,7 @@ Head over to the [Cairo Book](https://book.cairo-lang.org/ch02-00-common-program
 
 Scarb [cheatsheet](https://docs.swmansion.com/scarb/docs/cheatsheet.html)
 
-Software Mansion documentation of all available [Modules and Traits](https://docs.swmansion.com/scarb/corelib/core-starknet-storage.html?highlight=map#storage) 
-`TODO fix link`
+Software Mansion documentation of all available [Modules and Traits](https://docs.swmansion.com/scarb/corelib/index.html) 
 
 Tooling docs, such as `foundry` and `sncast` [guides](https://foundry-rs.github.io/starknet-foundry/starknet/index.html)
 
