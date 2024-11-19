@@ -21,14 +21,14 @@ pub enum Opcode {
 
 pub fn opcode_to_felt(opcode: Opcode) -> felt252 {
     match opcode {
-        Opcode::PUSH => 1,
-        Opcode::POP => 2,
-        Opcode::ADD => 3,
-        Opcode::SUB => 4,
-        Opcode::JMP => 5,
-        Opcode::JZ => 6,
-        Opcode::LOAD => 7,
-        Opcode::STORE => 8,
-        Opcode::HALT => 9,
+        Opcode::PUSH => 0,
+        Opcode::POP => 1,
+        Opcode::ADD => 2,
+        Opcode::SUB => 3,
+        Opcode::JMP => 4,
+        Opcode::JZ => 5,
+        Opcode::LOAD => 6,
+        Opcode::STORE => 7,
+        Opcode::HALT => 8,
     }
 }
