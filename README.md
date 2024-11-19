@@ -1,9 +1,22 @@
 # s42_smart_contract_workshop
-An end to end implementation and deployment of a Cairo smart contract on Starknet.
+An end to end implementation and deployment of a Cairo smart contract on Starknet with 
+TODOs on the way. A toy example of a VM. 
 
 ## Prerequisites 
 
-We will follow the [Scaffold STARK](https://github.com/Scaffold-Stark/scaffold-stark-2) guide for installing prerequisites. This allows you run a local devnet faster. 
+#### Rust 
+`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+
+#### Scarb 
+`curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh`
+
+#### Foundry
+`curl -L https://raw.githubusercontent.com/foundry-rs/starknet-foundry/master/scripts/install.sh | sh` 
+
+Run `snfoundryup`
+
+#### Universal Sierra Compiler
+`curl -L https://raw.githubusercontent.com/software-mansion/universal-sierra-compiler/master/scripts/install.sh | sh`
 
 ## Installation
 

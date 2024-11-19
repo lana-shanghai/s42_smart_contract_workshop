@@ -20,7 +20,8 @@ pub trait IProvableVM<TContractState> {
 #[starknet::contract]
 pub mod ProvableVM {
     use super::IProvableVM;
-use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess, Vec, VecTrait, MutableVecTrait};
+    /// Traits needed to manipulate storage and to use and modify Vec.
+    use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess, Vec, VecTrait, MutableVecTrait};
 
     #[storage]
     struct Storage {
@@ -34,31 +35,34 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
     #[abi(embed_v0)]
     impl ProvableVMImpl of super::IProvableVM<ContractState> {
         fn get_stack(self: @ContractState) -> Array<felt252> {
-            let mut stack = array![];
-            for i in 0..self.stack.len() {
-                stack.append(self.stack.at(i).read());
-            };
-            stack
+            // TODO declare an empty array. How to make sure we can add items to it?
+            
+            // TODO loop through the stack Vec in storage and append to the array.
+            // Now the compiler says the VecTrait is unused, but what happens if we
+            // add the code? 
+            array![]
         }
         
         fn get_pc(self: @ContractState) -> felt252 {
-            self.pc.read()
+            // TODO: read the program counter from the storage
+            0
         }
 
         fn write_heap(ref self: ContractState, value: felt252) {
-            self.heap.write(value);
+            // TODO write to the heap
         }
 
         fn get_heap(ref self: ContractState) -> felt252 {
-            self.heap.read()
+            // TODO: read from the heap
+            0
         }
 
         fn execute_instruction(ref self: ContractState, opcode: felt252, operand: felt252) {
                 match opcode {
                     // PUSH
                     0 => { 
-                        self.stack.append().write(operand);
-                        self.stack_len.write(self.stack_len.read() + 1);
+                        // TODO: write the operand to the stack
+                        // TODO: update stack length
                     },
                     // POP
                     1 => { 
@@ -70,27 +74,23 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
                     }, 
                     // ADD
                     2 => { 
-                        let stack = self.get_stack();
-                        let sum = *stack.at(
-                            self.stack_len.read() - 1_u32
-                        ) + *stack.at(
-                            self.stack_len.read() - 2_u32
-                        );
+                        let _stack = self.get_stack();
+                        let _sum = 1 + 2;
+                        // TODO: read the last two elements and add them
+                        // the last from the one before
 
-                        self.stack.append().write(sum);
-                        self.stack_len.write(self.stack_len.read() + 1);
+                        // TODO: write sum to stack
+                        // TODO: update stack length
                     }, 
                     // SUB
                     3 => { 
-                        let stack = self.get_stack();
-                        let diff = *stack.at(
-                            self.stack_len.read() - 2_u32
-                        ) - *stack.at(
-                            self.stack_len.read() - 1_u32
-                        );
+                        let _stack = self.get_stack();
+                        let _diff = 2 - 1; 
+                        // TODO: read the last two elements and substract
+                        // the last from the one before
                         
-                        self.stack.append().write(diff);
-                        self.stack_len.write(self.stack_len.read() + 1);
+                        // TODO: write diff to stack
+                        // TODO: update stack length
                     }, 
                     4 => {  }, // JMP
                     5 => {  }, // JZ
@@ -98,7 +98,7 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
                     6 => { 
                         let heap_element = self.heap.read();
                         self.stack.append().write(heap_element); 
-                        self.stack_len.write(self.stack_len.read() + 1);
+                        // TODO: update stack length
                     }, 
                     // STORE
                     7 => { 
@@ -113,11 +113,11 @@ use core::starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAcces
         }
         
         fn run_program(ref self: ContractState, mut program: Array<(felt252, felt252)>) -> Result<bool, felt252> {
-            while let Option::Some(instruction) = program.pop_front() {
-                let (opcode, operand) = instruction;
-                self.execute_instruction(opcode, operand);
+            while let Option::Some(_instruction) = program.pop_front() {
+                // TODO: unpack the tuple to get the opcode and operand!
+                self.execute_instruction(0, 0);
                 // Increment counter
-                self.pc.write(self.pc.read() + 1);
+                // TODO: increment counter
             };
             return Result::Ok(true);
         }
