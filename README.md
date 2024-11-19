@@ -88,7 +88,7 @@ Prefund your account with some Sepolia testnet ETH using a [faucet](https://star
 To add the Braavos account to `sncast` run:
 
 ```bash
-sncast account add \               
+sncast account import \               
     --url https://starknet-sepolia.public.blastapi.io/rpc/v0_7 \                      
     --name YOUR_ACCOUNT \
     --address YOUR_ADDRESS \
