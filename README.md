@@ -45,11 +45,12 @@ Follow the `TODO`s in the `src/vm/vm.cairo` and `tests/test_contract.cairo`!
 
 ## Useful and helpful docs
 
-You can head over the [Cairo Book](https://book.cairo-lang.org/ch02-00-common-programming-concepts.html)
+Head over to the [Cairo Book](https://book.cairo-lang.org/ch02-00-common-programming-concepts.html)
 
-Or to the detailed Software Mansion documentation of all available [Modules and Traits]
+Software Mansion documentation of all available [Modules and Traits](https://docs.swmansion.com/scarb/corelib/core-starknet-storage.html?highlight=map#storage) 
+`TODO fix link`
 
-Also there is tooling docs, such as `foundry` and `sncast` [guides](https://foundry-rs.github.io/starknet-foundry/starknet/index.html)
+Tooling docs, such as `foundry` and `sncast` [guides](https://foundry-rs.github.io/starknet-foundry/starknet/index.html)
 
 ## Build and test the contracts
 
