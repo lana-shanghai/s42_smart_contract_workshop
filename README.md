@@ -58,6 +58,8 @@ Software Mansion documentation of all available [Modules and Traits](https://doc
 
 Tooling docs, such as `foundry` and `sncast` [guides](https://foundry-rs.github.io/starknet-foundry/starknet/index.html)
 
+[StarkNet by Example](https://github.com/NethermindEth/StarknetByExample/tree/main) from Nethermind 
+
 ## Build and test the contracts
 
 `scarb build` and `scarb test`
