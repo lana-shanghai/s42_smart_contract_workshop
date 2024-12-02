@@ -33,8 +33,12 @@ fn test_push_opcode_operand() {
 
     let dispatcher = IProvableVMDispatcher { contract_address };
 
+    let len_before = dispatcher.get_len();
     // Execute push opcode with operand 10
     dispatcher.execute_instruction(0, 10);
+    let len_after = dispatcher.get_len();
+    assert(len_before == 0, 'Len before is wrong');
+    assert(len_after == 1, 'Len after is wrong');
 
     let stack_after = dispatcher.get_stack();
     assert(stack_after == array![10], 'Incorrect stack');
@@ -45,60 +49,84 @@ fn test_pop_opcode_operand() {
     let contract_address = deploy_contract("ProvableVM");
 
     let dispatcher = IProvableVMDispatcher { contract_address };
+    dispatcher.execute_instruction(0, 10); // PUSH 10
+    assert(dispatcher.get_vec().len() == 1, 'Vec len is wrong');
 
-    // TODO test the pop opcode
+    dispatcher.execute_instruction(0, 11); // PUSH 11
+    assert(dispatcher.get_vec().len() == 2, 'Vec len is wrong');
+
+    dispatcher.execute_instruction(1, 0); // POP
+    assert(dispatcher.get_vec().len() == 2, 'Vec len is wrong');
+
+    dispatcher.execute_instruction(1, 0); // POP
+    assert(dispatcher.get_vec().len() == 2, 'Vec len is wrong');
+
+    let del_val: felt252 = 'Deleted value'.into();  // 5418904080056592270825848862053
+    assert(dispatcher.get_vec() == array![del_val, del_val], 'Incorrect vec');
+
+    dispatcher.execute_instruction(0, 12); // PUSH 12
+    assert(dispatcher.get_vec().len() == 2, 'Vec len is wrong');
+
+    dispatcher.execute_instruction(0, 13); // PUSH 13
+    assert(dispatcher.get_vec().len() == 2, 'Vec len is wrong');
+
+
+    assert(dispatcher.get_stack() == array![12, 13], 'Incorrect stack');
+    assert(dispatcher.get_vec() == array![12, 13], 'Incorrect vec');
+
+    assert(dispatcher.get_len() == 2, 'Stack len after is wrong');
 }
 
-#[test]
-fn test_add_opcode_operand() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_add_opcode_operand() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the add opcode
-}
+//     // TODO test the add opcode
+// }
 
-#[test]
-fn test_sub_opcode_operand() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_sub_opcode_operand() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the sub opcode
-}
+//     // TODO test the sub opcode
+// }
 
-#[test]
-fn test_store_opcode_operand() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_store_opcode_operand() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the store opcode
-}
+//     // TODO test the store opcode
+// }
 
-#[test]
-fn test_load_opcode_operand() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_load_opcode_operand() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the load opcode
-}
+//     // TODO test the load opcode
+// }
 
-#[test]
-fn test_halt_opcode_operand() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_halt_opcode_operand() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the halt opcode
-}
+//     // TODO test the halt opcode
+// }
 
-#[test]
-fn test_pc() {
-    let contract_address = deploy_contract("ProvableVM");
+// #[test]
+// fn test_pc() {
+//     let contract_address = deploy_contract("ProvableVM");
 
-    let dispatcher = IProvableVMDispatcher { contract_address };
+//     let dispatcher = IProvableVMDispatcher { contract_address };
 
-    // TODO test the program counter when running a program
-}
+//     // TODO test the program counter when running a program
+// }

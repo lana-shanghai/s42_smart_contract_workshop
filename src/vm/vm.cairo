@@ -9,11 +9,15 @@ pub trait IProvableVM<TContractState> {
     /// Write a new element to the heap.
     fn write_heap(ref self: TContractState, value: felt252) {}
     /// Read from the heap.
-    fn get_heap(ref self: TContractState) -> felt252;
+    fn get_heap(self: @TContractState) -> felt252;
     /// Retrieve latest stack.
     fn get_stack(self: @TContractState) -> Array<felt252>;
+    /// Retrieve actual vec.
+    fn get_vec(self: @TContractState) -> Array<felt252>;
     /// Retrieve program counter.
     fn get_pc(self: @TContractState) -> felt252;
+    /// Get length of the full Vec.
+    fn get_len(self: @TContractState) -> felt252;
 }
 
 /// A simple provable VM.
@@ -33,6 +37,16 @@ pub mod ProvableVM {
 
     #[abi(embed_v0)]
     impl ProvableVMImpl of super::IProvableVM<ContractState> {
+        fn get_len(self: @ContractState) -> felt252 {
+            let mut stack: Array<felt252> = array![];
+
+            for i in 0..self.get_stack().len() {
+                stack.append(self.stack.at(i.try_into().unwrap()).read());
+            };
+
+            stack.len().into()
+        }
+
         fn get_stack(self: @ContractState) -> Array<felt252> {
             // TODO declare an empty array. How to make sure we can add items to it?
             let mut stack: Array<felt252> = array![];
@@ -46,6 +60,16 @@ pub mod ProvableVM {
             // add the code? 
             stack
         }
+
+        fn get_vec(self: @ContractState) -> Array<felt252> {
+            let mut vec: Array<felt252> = array![];
+
+            for i in 0..self.stack.len() {
+                vec.append(self.stack.at(i.try_into().unwrap()).read());
+            };
+
+            vec
+        }
         
         fn get_pc(self: @ContractState) -> felt252 {
             self.pc.read()
@@ -55,7 +79,7 @@ pub mod ProvableVM {
             self.heap.write(value);
         }
 
-        fn get_heap(ref self: ContractState) -> felt252 {
+        fn get_heap(self: @ContractState) -> felt252 {
             self.heap.read()
         }
 
@@ -63,19 +87,33 @@ pub mod ProvableVM {
                 match opcode {
                     // PUSH
                     0 => { 
-                        // TODO: write the operand to the stack
-                        self.stack.append().write(operand);
-                        // TODO: update stack length
+                        // Check if we need to overwrite a "deleted" slot or append
+                        if self.stack_len.read().into() < self.stack.len() {
+                            // If there's room in the pre-allocated stack (deleted slot), overwrite the slot
+                            let mut storage_ptr = self.stack.at(self.stack_len.read().try_into().unwrap());
+                            storage_ptr.write(operand);
+                        } else {
+                            // Append a new value if no deleted slots exist
+                            self.stack.append().write(operand);
+                        }
+                        // Update the stack length to reflect the added element
                         self.stack_len.write(self.stack_len.read() + 1);
                     },
+                
                     // POP
                     1 => { 
-                        let mut storage_ptr = self.stack.at(
-                            self.stack_len.read().try_into().unwrap() - 1_u64
-                        );
-                        storage_ptr.write('Deleted value');
-                        self.stack_len.write(self.stack_len.read() - 1);
+                        if self.stack_len.read() > 0 {
+                            let mut storage_ptr = self.stack.at(
+                                self.stack_len.read().try_into().unwrap() - 1_u64
+                            );
+                            storage_ptr.write('Deleted value'); // Mark the value as deleted
+                            self.stack_len.write(self.stack_len.read() - 1); // Decrease the logical stack length
+                        } else {
+                            // Optional: Handle underflow case for popping from an empty stack
+                            panic!("Attempted to pop from an empty stack");
+                        }
                     }, 
+
                     // ADD
                     2 => { 
                         let _stack = self.get_stack();
